@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ofxOsc">
+      <UniqueIdentifier>{ef937a82-879b-4f67-b061-9a104adc4d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\src">
+      <UniqueIdentifier>{71935dda-5013-41c4-9542-0a6f1211833c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\libs">
+      <UniqueIdentifier>{d978bc65-6985-45f4-9a6d-4f256159b502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\libs\oscpack">
+      <UniqueIdentifier>{d96dea4e-99a5-4ec5-afe7-bb66195ab7f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\libs\oscpack\src">
+      <UniqueIdentifier>{742ff7ec-0ead-4d2b-9426-61362c532296}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\libs\oscpack\src\ip">
+      <UniqueIdentifier>{a46409a0-d934-4c97-9e01-fee77142bcd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\libs\oscpack\src\osc">
+      <UniqueIdentifier>{3ccee6d1-84ed-44b1-8bad-90e5efed6363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\libs\oscpack\src\ip\posix">
+      <UniqueIdentifier>{10881117-0551-453c-a546-df3baa2243e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\libs\oscpack\src\ip\win32">
+      <UniqueIdentifier>{824a6822-6767-4003-b7a2-92b858e7186f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="of_core">
+      <UniqueIdentifier>{2a5c4caf-855a-4a36-825f-7b1160e8db9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="of_core\utils">
+      <UniqueIdentifier>{16676219-6cec-409d-a39b-e9c97867ceba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="of_core\types">
+      <UniqueIdentifier>{a34c78e4-81e7-4799-91d4-cd09116014d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="of_core\math">
+      <UniqueIdentifier>{1c15ed78-e743-4b7c-ab5f-040adfc42cb1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="MultiFace.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiFace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FTHelper2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SingleFace\eggavatar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SingleFace\KinectSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SingleFace\Visualize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOsc.h">
+      <Filter>ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscArg.h">
+      <Filter>ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscBundle.h">
+      <Filter>ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscMessage.h">
+      <Filter>ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscReceiver.h">
+      <Filter>ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscSender.h">
+      <Filter>ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\osc\OscException.h">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\osc\OscPacketListener.h">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\osc\OscTypes.h">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\ip\IpEndpointName.h">
+      <Filter>ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h">
+      <Filter>ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\ip\PacketListener.h">
+      <Filter>ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\ip\TimerListener.h">
+      <Filter>ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
+      <Filter>ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\ofMain.h">
+      <Filter>of_core</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\utils\ofConstants.h">
+      <Filter>of_core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\utils\ofFileUtils.h">
+      <Filter>of_core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\utils\ofLog.h">
+      <Filter>of_core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\utils\ofNoise.h">
+      <Filter>of_core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\utils\ofSystemUtils.h">
+      <Filter>of_core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\utils\ofThread.h">
+      <Filter>of_core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\utils\ofURLFileLoader.h">
+      <Filter>of_core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\utils\ofUtils.h">
+      <Filter>of_core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\types\ofBaseTypes.h">
+      <Filter>of_core\types</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\types\ofColor.h">
+      <Filter>of_core\types</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\types\ofPoint.h">
+      <Filter>of_core\types</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\types\ofRectangle.h">
+      <Filter>of_core\types</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\types\ofTypes.h">
+      <Filter>of_core\types</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\math\ofMath.h">
+      <Filter>of_core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\math\ofMatrix3x3.h">
+      <Filter>of_core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\math\ofMatrix4x4.h">
+      <Filter>of_core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\math\ofQuaternion.h">
+      <Filter>of_core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\math\ofVec2f.h">
+      <Filter>of_core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\math\ofVec3f.h">
+      <Filter>of_core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\math\ofVec4f.h">
+      <Filter>of_core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="of_core\math\ofVectorMath.h">
+      <Filter>of_core\math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiFace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FTHelper2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SingleFace\eggavatar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SingleFace\KinectSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SingleFace\Visualize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\src\ofxOscBundle.cpp">
+      <Filter>ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\src\ofxOscMessage.cpp">
+      <Filter>ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\src\ofxOscReceiver.cpp">
+      <Filter>ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\src\ofxOscSender.cpp">
+      <Filter>ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\osc\OscTypes.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\ip\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\ip\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\ip\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp">
+      <Filter>ofxOsc\libs\oscpack\src\ip\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\utils\ofFileUtils.cpp">
+      <Filter>of_core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\utils\ofLog.cpp">
+      <Filter>of_core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\utils\ofSystemUtils.cpp">
+      <Filter>of_core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\utils\ofThread.cpp">
+      <Filter>of_core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\utils\ofURLFileLoader.cpp">
+      <Filter>of_core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\utils\ofUtils.cpp">
+      <Filter>of_core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\types\ofBaseTypes.cpp">
+      <Filter>of_core\types</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\types\ofColor.cpp">
+      <Filter>of_core\types</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\types\ofPoint.cpp">
+      <Filter>of_core\types</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\types\ofRectangle.cpp">
+      <Filter>of_core\types</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\math\ofMath.cpp">
+      <Filter>of_core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\math\ofMatrix3x3.cpp">
+      <Filter>of_core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\math\ofMatrix4x4.cpp">
+      <Filter>of_core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\math\ofQuaternion.cpp">
+      <Filter>of_core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\math\ofVec2f.cpp">
+      <Filter>of_core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="of_core\math\ofVec4f.cpp">
+      <Filter>of_core\math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MultiFace.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,10 @@
+
+/*
+	Big thanks to microsoft ! The kinect SDK is fun and had good data... I just don't want to use
+	XNA and windows rendering.
+*/
+
+
+Addon / Collection of code to get the FaceTracking part of the Kinect SDK to OF.
+
+Built for OF 0071 for Visual Studio on Windows 7.
