@@ -2,18 +2,21 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+
 	// listen on the given port
 	cout << "listening for osc messages on port " << PORT << "\n";
 	receiver.setup(PORT);
 
 	current_msg_string = 0;
-	mouseX = 0;
-	mouseY = 0;
-	mouseButtonState = "";
 
 	ofBackground(30, 30, 130);
 	ofSetFrameRate( 30 ); 
-	faceMesh.init() ; 
+	faceTriangulate.reset() ; 
+
+	for ( int i = 0 ; i < VERTS_PER_FACE * 2 ; i++ ) 
+	{
+		lerpedPoints.push_back( ofPoint( ofRandomWidth() , ofRandomHeight() ) ) ; 
+	}
 	// 
 
 }
@@ -21,6 +24,8 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
 
+
+	ofSetWindowTitle( "FPS: "+ ofToString( ofGetFrameRate() )) ; 
 	// hide old messages
 	for(int i = 0; i < NUM_MSG_STRINGS; i++){
 		if(timers[i] < ofGetElapsedTimef()){
@@ -38,25 +43,35 @@ void testApp::update(){
 		// check for mouse moved message
 		if(m.getAddress() == "faceMesh/")
 		{
-			int numPoints = m.getNumArgs() ; 
-			cout << "numPoints " << numPoints << endl ; 
-			facePts.clear() ; 
-			faceMesh.reset() ; 
-			for ( int i = 0 ; i < (numPoints-4) ; i+=2 ) 
+			int numFacePoints = m.getNumArgs() ; 
+			if ( numFacePoints > 45 ) 
 			{
-				ofPoint p = ofPoint ( m.getArgAsFloat(i) , m.getArgAsFloat(i+1) ) ; 
-				cout << "@ " << i << " " << p << endl ; 
-				faceMesh.addPoint ( p.x , p.y , 1 ) ; 
-				facePts.push_back( p ) ; 
-			}
+				//cout << "numFacePoints " << numFacePoints << endl ; 
+				//faceTriangulate.reset() ; 
+				bool addPoints = false ; 
+				if ( lerpedPoints.size() < 1 ) 
+					addPoints = true ; 
 
-			faceMesh.triangulate( ) ;
-			return ; 
-		}
-		// check for mouse button message
-		else if(m.getAddress() == "/mouse/button"){
-			// the single argument is a string
-			mouseButtonState = m.getArgAsString(0);
+			
+				faceCentroid = ofPoint() ; 
+				for ( int p = 0 ; p < (numFacePoints) ; p+=2 ) 
+				{
+
+					ofPoint _p = ofPoint ( m.getArgAsFloat(p) , m.getArgAsFloat(p+1) ) ;
+					int i = p / 2 ; 
+
+					if ( i < VERTS_PER_FACE ) 
+					{
+						lerpedPoints[i] = lerpedPoints[i].interpolate( _p , 0.5f ) ; 
+						faceCentroid += lerpedPoints[i] ; 
+					//	Tweenzor::add( &lerpedPoints[i].x , lerpedPoints[i].x , _p.x , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
+					//	Tweenzor::add( &lerpedPoints[i].y , lerpedPoints[i].x , _p.y , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
+					}
+				}
+
+				faceCentroid /= ( float ) VERTS_PER_FACE ; 
+			}
+			
 		}
 		else{
 			// unrecognized message: display on the bottom of the screen
@@ -91,6 +106,15 @@ void testApp::update(){
 
 	}
 
+	if ( lerpedPoints.size() > 0 ) 
+	{
+		faceTriangulate.reset() ; 
+		for ( int i = 0 ; i < VERTS_PER_FACE ; i++ ) 
+		{
+			faceTriangulate.addPoint ( lerpedPoints[i] ) ;
+		}
+		faceTriangulate.triangulate() ; 
+	}
 	
 }
 
@@ -107,23 +131,30 @@ void testApp::draw(){
 	}
 
 	ofFill( ) ; 
-	ofSetColor( 0 , 255 , 212 ) ; 
-	if ( facePts.size() > 0 ) 
-	{
-		int numFacePts = facePts.size() ; 
-		for ( int i = 0 ; i < numFacePts ; i++ ) 
-		{
-			ofCircle( facePts[i] , 5 ) ; 
-		}
-	}
+	ofSetColor( 250 , 250 , 212 ) ; 
+	ofNoFill() ; 
+	//faceMesh.drawWireframe() ; 
 
+	cam.begin() ; 
+	//ofScale( 1 , -1 , 1 ) ; 
+	//ofTranslate( 0 , -ofGetHeight() , 0 ) ; 
+	
+	ofTranslate( -ofGetWidth()   ,  ofGetHeight() ) ; 
+	ofScale( 3 , -3 , 1 ) ; 
+	faceTriangulate.draw( ) ;
+
+	cam.end() ; 
 
 
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
+	switch ( key ) 
+	{
+	}
 
+	cout << "keyPressed :: " << key << endl ;  
 }
 
 //--------------------------------------------------------------

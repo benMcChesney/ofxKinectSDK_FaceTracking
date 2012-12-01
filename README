@@ -8,3 +8,8 @@
 Addon / Collection of code to get the FaceTracking part of the Kinect SDK to OF.
 
 Built for OF 0071 for Visual Studio on Windows 7.
+
+Additional Dependencies : 
+
+ofxTweenzor
+ofxDelaunay 
