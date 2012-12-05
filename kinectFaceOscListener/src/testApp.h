@@ -37,4 +37,7 @@ class testApp : public ofBaseApp {
 		
 		ofEasyCam cam ; 
 		ofPoint faceCentroid ; 
+
+		ofRectangle faceBounds ; 
+		float facePointSmoothing ; 
 };

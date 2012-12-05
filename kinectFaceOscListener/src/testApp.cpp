@@ -12,6 +12,7 @@ void testApp::setup(){
 	ofBackground(30, 30, 130);
 	ofSetFrameRate( 30 ); 
 	faceTriangulate.reset() ; 
+	facePointSmoothing = 0.5f ; 
 
 	for ( int i = 0 ; i < VERTS_PER_FACE * 2 ; i++ ) 
 	{
@@ -54,6 +55,8 @@ void testApp::update(){
 
 			
 				faceCentroid = ofPoint() ; 
+				//Set default high so they get overwritten
+				faceBounds = ofRectangle( 10000 , 100000 , -10000 , -10000 ) ; 
 				for ( int p = 0 ; p < (numFacePoints) ; p+=2 ) 
 				{
 
@@ -62,8 +65,19 @@ void testApp::update(){
 
 					if ( i < VERTS_PER_FACE ) 
 					{
-						lerpedPoints[i] = lerpedPoints[i].interpolate( _p , 0.5f ) ; 
+						lerpedPoints[i] = lerpedPoints[i].interpolate( _p , facePointSmoothing ) ; 
 						faceCentroid += lerpedPoints[i] ; 
+
+						if ( lerpedPoints[i].x < faceBounds.x ) 
+							faceBounds.x = lerpedPoints[i].x ; 
+						if ( lerpedPoints[i].y < faceBounds.y ) 
+							faceBounds.y = lerpedPoints[i].y ;
+						if ( lerpedPoints[i].x > faceBounds.width )
+							faceBounds.width = lerpedPoints[i].x ; 
+						if ( lerpedPoints[i].y < faceBounds.height ) 
+							faceBounds.height = lerpedPoints[i].y ; 
+
+
 					//	Tweenzor::add( &lerpedPoints[i].x , lerpedPoints[i].x , _p.x , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
 					//	Tweenzor::add( &lerpedPoints[i].y , lerpedPoints[i].x , _p.y , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
 					}
@@ -135,15 +149,55 @@ void testApp::draw(){
 	ofNoFill() ; 
 	//faceMesh.drawWireframe() ; 
 
+	cam.setDistance( 365.0f ) ; 
+	cam.lookAt( faceCentroid ) ; 
 	cam.begin() ; 
 	//ofScale( 1 , -1 , 1 ) ; 
 	//ofTranslate( 0 , -ofGetHeight() , 0 ) ; 
 	
-	ofTranslate( -ofGetWidth()   ,  ofGetHeight() ) ; 
-	ofScale( 3 , -3 , 1 ) ; 
-	faceTriangulate.draw( ) ;
-
+	//ofTranslate( -ofGetWidth()   ,  ofGetHeight() ) ; 
+	//ofScale( 3 , -3 , 1 ) ; 
+	
+		ofPushMatrix() ; 
+			faceTriangulate.draw( ) ;
+			ofPushStyle() ; 
+				ofNoFill( ) ; 
+				ofSetColor( 255 , 0 , 0 ) ;
+				ofSetLineWidth( 10 ) ;
+				ofRect( faceBounds.x, faceBounds.y , faceBounds.width - faceBounds.x , faceBounds.height - faceBounds.y ) ; 
+			ofPopStyle() ;
+		ofPopMatrix() ; 
 	cam.end() ; 
+
+	int n = faceTriangulate.triangleMesh.getNumVertices();
+	float nearestDistance = 0;
+	ofVec2f nearestVertex;
+	int nearestIndex;
+	ofVec2f mouse(mouseX, mouseY);
+	for(int i = 0; i < n; i++) {
+		ofVec3f cur = cam.worldToScreen(faceTriangulate.triangleMesh.getVertex(i));
+		float distance = cur.distance(mouse);
+		if(i == 0 || distance < nearestDistance) {
+			nearestDistance = distance;
+			nearestVertex = cur;
+			nearestIndex = i;
+		}
+	}
+
+	 
+
+
+	ofSetColor(ofColor::gray);
+	ofLine(nearestVertex, mouse);
+	
+	ofNoFill();
+	ofSetColor(ofColor::yellow);
+	ofSetLineWidth(2);
+	ofCircle(nearestVertex, 4);
+	ofSetLineWidth(1);
+	
+	ofVec2f offset(10, -10);
+	ofDrawBitmapStringHighlight(ofToString(nearestIndex), mouse + offset);
 
 
 }
