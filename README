@@ -1,15 +1,25 @@
 
 /*
+	Addon / Collection of code to get the FaceTracking part of the Kinect SDK to OF.
+
+	Built for OF 0071 for Visual Studio on Windows 7.
+
 	Big thanks to microsoft ! The kinect SDK is fun and had good data... I just don't want to use
 	XNA and windows rendering.
 */
 
+Currently supports : 
+	Mouth Width
+	Mouth Height
+	Left Eyebrow
+	Right Eyebrow
+	
+	but add whatever you want!
+	
+Load / Save calibration via XML and training.
 
-Addon / Collection of code to get the FaceTracking part of the Kinect SDK to OF.
-
-Built for OF 0071 for Visual Studio on Windows 7.
 
 Additional Dependencies : 
 
-ofxTweenzor
+ofxXmlSettings
 ofxDelaunay 

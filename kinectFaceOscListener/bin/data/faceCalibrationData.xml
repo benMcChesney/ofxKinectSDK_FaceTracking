@@ -1,0 +1,28 @@
+<feature>
+    <label>mouth_height</label>
+    <meshIndex1>82</meshIndex1>
+    <meshIndex2>84</meshIndex2>
+    <minDistance>0</minDistance>
+    <maxDistance>25</maxDistance>
+</feature>
+<feature>
+    <label>mouth_wide</label>
+    <meshIndex1>31</meshIndex1>
+    <meshIndex2>64</meshIndex2>
+    <minDistance>16.0312</minDistance>
+    <maxDistance>43.2897</maxDistance>
+</feature>
+<feature>
+    <label>eyebrow_left</label>
+    <meshIndex1>15</meshIndex1>
+    <meshIndex2>20</meshIndex2>
+    <minDistance>8.06226</minDistance>
+    <maxDistance>21.4709</maxDistance>
+</feature>
+<feature>
+    <label>eyebrow_right</label>
+    <meshIndex1>51</meshIndex1>
+    <meshIndex2>53</meshIndex2>
+    <minDistance>9</minDistance>
+    <maxDistance>25.0799</maxDistance>
+</feature>

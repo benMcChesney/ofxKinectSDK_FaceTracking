@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "ofxOsc.h"
 #include "ofxDelaunay.h"
+#include "FeatureRelationship.h"
+#include "ofxXmlSettings.h"
 
 // listen on port 12345
 #define PORT 12345
@@ -40,4 +42,12 @@ class testApp : public ofBaseApp {
 
 		ofRectangle faceBounds ; 
 		float facePointSmoothing ; 
+
+		ofMesh rawMesh ; 
+
+		vector<FeatureRelationship> featureRelations ; 
+		void saveFeatureCalibration( string _path ) ; 
+		void loadFeatureCalibration ( string _path ) ; 
+
+		bool bTraining ;
 };
