@@ -18,6 +18,14 @@ Release*/
 *.pyc
 .svn/
 
+*.dll
+*.exe
+*.pdb
+*.exp
+*.ilk
+*.lib
+
+
 # IDE-specific ignore patterns
 
 #XCode

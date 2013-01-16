@@ -42,6 +42,10 @@ void testApp::setup(){
 	//cam.setPosition( -500 ,  , -500 ) ; 
 	// 
 	bTraining = false ; 
+	bResetData = false ; 
+	bConnectSender = false ; 
+
+	setupUI( ) ; 
 }
 
 //--------------------------------------------------------------
@@ -167,6 +171,27 @@ void testApp::update(){
 		}
 	}
 	
+	if ( lerpedPoints.size() > 0 ) 
+	{
+		if ( bConnectSender == true ) 
+		{
+			for ( int i = 0 ; i < featureRelations.size() ; i++ ) 
+			{
+				ofxOscMessage m ;
+	
+				m.clear() ; 
+				m.setAddress( "/" + featureRelations[i].label ) ; 
+				m.addFloatArg( featureRelations[i].ratio ) ; 
+
+				sender.sendMessage( m ) ; 
+				
+				//featureRelations[i].update( rawMesh.getVertex( featureRelations[i].meshIndex1 ) ,
+				//					    rawMesh.getVertex( featureRelations[i].meshIndex2 ) , bTraining ) ;  
+
+			}
+			
+		}
+	}
 }
 
 
@@ -269,9 +294,18 @@ void testApp::keyPressed(int key){
 			saveFeatureCalibration ( "faceCalibrationData.xml" ) ; 
 			break ;
 
+			/*
 		case 't':
 		case 'T':
 			bTraining = !bTraining ; 
+			break ; 
+
+		case 'r':
+		case 'R':
+			for ( int i = 0 ; i < featureRelations.size() ; i++ ) 
+		{
+			featureRelations[i].resetTraining() ;  
+		}*/
 			break ; 
 	}
 
@@ -371,5 +405,98 @@ void testApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void testApp::dragEvent(ofDragInfo dragInfo){
+
+}
+
+void testApp::setupUI ( ) 
+{
+	//sendPort
+
+	float dim = 24; 
+	float xInit = OFX_UI_GLOBAL_WIDGET_SPACING; 
+    float length = 320-xInit; 
+	gui = new ofxUICanvas(0, 0, length+xInit, ofGetHeight());
+
+	gui->addWidgetDown(new ofxUILabel("FACE TRACKING PARAMETERS", OFX_UI_FONT_LARGE ));
+	//gui->addWidgetDown(new ofxUISlider(length-xInit,dim, 0.0, 255.0, red, "RED")); 
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "ENABLE TRAINING")); 
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "RESET TRAINING DATA")); 
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "CONNECT SENDER OSC"));
+	gui->addWidgetDown(new ofxUITextInput( length-xInit, "SENDING PORT", ofToString( sendPort ) , OFX_UI_FONT_LARGE)); 
+	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
+
+	gui->loadSettings( "gui/paramSettings.xml" ) ; 
+}
+
+void testApp::guiEvent(ofxUIEventArgs &e)
+{
+	string name = e.widget->getName(); 
+	int kind = e.widget->getKind(); 
+
+	/*
+
+	case 't':
+		case 'T':
+			bTraining = !bTraining ; 
+			break ; 
+
+		case 'r':
+		case 'R':
+			for ( int i = 0 ; i < featureRelations.size() ; i++ ) 
+		{
+			featureRelations[i].resetTraining() ;  
+		}
+		//bConnectSender
+		*/
+	if(name == "ENABLE TRAINING") 
+	{
+		bTraining = ( (ofxUIToggle *) e.widget )->getValue() ; 
+	}
+
+	if(name == "CONNECT SENDER OSC" ) 
+	{ 
+		bConnectSender = ( (ofxUIToggle *) e.widget )->getValue() ; 
+		if ( bConnectSender == true ) 
+		{
+			cout << "attempting to connect to : " << " localHost : " << " on port : " << sendPort << endl; 
+			sender.setup( "localhost" , sendPort ) ; 
+		}
+	}
+
+	if(name == "RESET TRAINING DATA")
+	{
+		bResetData = ( (ofxUIToggle *) e.widget )->getValue() ; 
+		if ( bResetData == true ) 
+		{
+			for ( int i = 0 ; i < featureRelations.size() ; i++ ) 
+			{
+			featureRelations[i].resetTraining() ;  
+			}
+		}
+		bResetData = false ;
+	}	
+
+	if ( name == "SENDING PORT" )
+	{
+		ofxUITextInput *textinput = (ofxUITextInput *) e.widget; 
+        if(textinput->getTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
+        {
+            //cout << "ON ENTER: "; 
+//            ofUnregisterKeyEvents((testApp*)this); 
+        }
+        else if(textinput->getTriggerType() == OFX_UI_TEXTINPUT_ON_FOCUS)
+        {
+           // cout << "ON FOCUS: "; 
+        }
+        else if(textinput->getTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS)
+        {
+          //  cout << "ON BLUR: "; 
+//            ofRegisterKeyEvents(this);             
+        }        
+        string output = textinput->getTextString(); 
+		sendPort = ofToInt( output ) ; 
+        cout << output << endl; 
+	}
+
 
 }

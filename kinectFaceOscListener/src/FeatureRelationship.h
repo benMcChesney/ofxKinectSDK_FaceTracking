@@ -15,9 +15,7 @@ class FeatureRelationship
 			meshIndex2 = _meshIndex2 ; 
 			label = _label ; 
 
-			//Max these outrageously high so that they 
-			minDistance = 100000.0f ; 
-			maxDistance = -100000.0f ;
+			resetTraining() ; 
 		}
 
 		void setup ( int _meshIndex1 , int _meshIndex2 , string _label , float _minDistance , float _maxDistance ) 
@@ -69,6 +67,13 @@ class FeatureRelationship
 					ofDrawBitmapStringHighlight( generateString() , 0 , height - 15 ) ; 
 				ofPopStyle() ;	
 			ofPopMatrix() ; 
+		}
+
+		void resetTraining() 
+		{
+			//Max these outrageously high so that they 
+			minDistance = 100000.0f ; 
+			maxDistance = -100000.0f ;
 		}
 
 		int meshIndex1 , meshIndex2 ; 

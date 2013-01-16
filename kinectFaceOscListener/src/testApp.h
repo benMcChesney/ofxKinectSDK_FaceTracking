@@ -5,6 +5,7 @@
 #include "ofxDelaunay.h"
 #include "FeatureRelationship.h"
 #include "ofxXmlSettings.h"
+#include "ofxUI.h"
 
 // listen on port 12345
 #define PORT 12345
@@ -30,6 +31,8 @@ class testApp : public ofBaseApp {
 
 		ofxOscReceiver receiver;
 
+		ofxOscSender sender ; 
+
 		int current_msg_string;
 		string msg_strings[NUM_MSG_STRINGS];
 		float timers[NUM_MSG_STRINGS];
@@ -50,4 +53,13 @@ class testApp : public ofBaseApp {
 		void loadFeatureCalibration ( string _path ) ; 
 
 		bool bTraining ;
+		bool bResetData ; 
+
+		//ofxUI
+		ofxUICanvas *gui;   	
+		void guiEvent(ofxUIEventArgs &e);
+		void setupUI( ) ; 
+		int sendPort ; 
+
+		bool bConnectSender ; 
 };
