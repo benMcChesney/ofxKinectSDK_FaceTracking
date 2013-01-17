@@ -1,0 +1,20 @@
+<Widget>
+    <Kind>2</Kind>
+    <Name>ENABLE TRAINING</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>RESET TRAINING DATA</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>CONNECT SENDER OSC</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>12</Kind>
+    <Name>SENDING PORT</Name>
+    <Value>54321</Value>
+</Widget>

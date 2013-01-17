@@ -498,5 +498,7 @@ void testApp::guiEvent(ofxUIEventArgs &e)
         cout << output << endl; 
 	}
 
+	gui->saveSettings( "gui/paramSettings.xml" ) ; 
+
 
 }
