@@ -143,7 +143,7 @@ void testApp::update(){
 				head_roll = m.getArgAsFloat( 2 ) ; 
 				//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
 				ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1,0,0 ) ); 
-				ofQuaternion yRot( ofRadToDeg( head_yaw ) -90 , ofVec3f( 0,1,0 ) ); 
+				ofQuaternion yRot( ofRadToDeg( head_yaw ) , ofVec3f( 0,1,0 ) ); 
 				ofQuaternion zRot( ofRadToDeg( head_roll ) , ofVec3f( 0,0,1 ) ); 
     
 				headOrientation = xRot * yRot * zRot ; 
@@ -219,25 +219,18 @@ void testApp::update(){
 			sender.sendMessage( m4 ) ; 
 
 			ofxOscMessage m5 ;
-			m5.setAddress( "/pitch" ) ; 
+			m5.setAddress( "/pitch_yaw_roll" ) ; 
 			m5.addFloatArg( debugPitch ) ; 
+			m5.addFloatArg( debugYaw ) ; 
+			m5.addFloatArg( debugRoll ) ; 
 			sender.sendMessage( m5 ) ; 
 
-			ofxOscMessage m6 ;
-			m6.setAddress( "/yaw" ) ; 
-			m6.addFloatArg( debugYaw ) ; 
-			sender.sendMessage( m6 ) ; 
-
-			ofxOscMessage m7 ;
-			m7.setAddress( "/roll" ) ; 
-			m7.addFloatArg( debugRoll ) ; 
-			sender.sendMessage( m7 ) ;
-
+	
 			ofQuaternion xRot( debugPitch, ofVec3f( 1,0,0 ) ); 
 			ofQuaternion yRot( debugYaw -90 , ofVec3f( 0,1,0 ) ); 
 			ofQuaternion zRot( debugRoll , ofVec3f( 0,0,1 ) ); 
     
-				headOrientation = xRot * yRot * zRot ; 
+			headOrientation = xRot * yRot * zRot ; 
 			return ; 
 		}
 
@@ -269,9 +262,15 @@ void testApp::update(){
 				sender.sendMessage( m ) ; 
 				
 				//featureRelations[i].update( rawMesh.getVertex( featureRelations[i].meshIndex1 ) ,
-				//					    rawMesh.getVertex( featureRelations[i].meshIndex2 ) , bTraining ) ;  
-
+				//rawMesh.getVertex( featureRelations[i].meshIndex2 ) , bTraining ) ; 
 			}
+
+			ofxOscMessage m1 ;
+			m1.setAddress( "/pitch_yaw_roll" ) ; 
+			m1.addFloatArg( ofRadToDeg( head_pitch ) ) ; 
+			m1.addFloatArg( ofRadToDeg( head_yaw ) ) ; 
+			m1.addFloatArg( ofRadToDeg( head_roll ) ) ; 
+			sender.sendMessage( m1 ) ; 
 			
 		}
 	}
