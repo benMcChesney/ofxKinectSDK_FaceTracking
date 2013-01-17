@@ -61,5 +61,20 @@ class testApp : public ofBaseApp {
 		void setupUI( ) ; 
 		int sendPort ; 
 
+		ofQuaternion headOrientation ; 
+		float head_pitch ; 
+		float head_yaw ; 
+		float head_roll ; 
+
 		bool bConnectSender ; 
+
+		bool bDebugData ; 
+		float debugMouthHeight ; 
+		float debugMouthWidth ; 
+		float debugEyebrowRight ; 
+		float debugEyebrowLeft ; 
+
+		float debugPitch ; 
+		float debugYaw ; 
+		float debugRoll ;
 };

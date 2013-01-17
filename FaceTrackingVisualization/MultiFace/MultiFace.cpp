@@ -13,6 +13,10 @@
 #include "FTHelper2.h"
 #include "ofxOsc.h"
 
+// listen on port 12345
+#define HOST "localhost"
+#define PORT 12345
+#define NUM_MSG_STRINGS 20
 
 class MultiFace
 {
@@ -20,7 +24,7 @@ public:
     MultiFace();
 
     int Run(HINSTANCE hInst, PWSTR lpCmdLine, int nCmdShow);
-
+	ofxOscSender * oscSender ; 
 
 protected:
     BOOL                        InitInstance(HINSTANCE hInst, PWSTR lpCmdLine, int nCmdShow);
@@ -73,7 +77,11 @@ MultiFace::MultiFace(): m_hInst(NULL),
 // Run the MultiFace application.
 int MultiFace::Run(HINSTANCE hInst, PWSTR lpCmdLine, int nCmdShow)
 {
-	
+	//Setup and initialization before the infinite loop
+	oscSender = new ofxOscSender(); 
+	oscSender->setup( HOST , PORT ) ;  
+	m_FTHelper.setupOsc( oscSender ) ; 
+
     MSG msg = {static_cast<HWND>(0), static_cast<UINT>(0), static_cast<WPARAM>(-1)};
     if (InitInstance(hInst, lpCmdLine, nCmdShow))
     {
@@ -84,6 +92,18 @@ int MultiFace::Run(HINSTANCE hInst, PWSTR lpCmdLine, int nCmdShow)
             {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
+				ofxOscMessage m ; 
+				m.setAddress( "pitch_yaw_roll/" ) ; 
+				/*
+				m_Pitch = 0;
+    m_Yaw = 0;
+    m_Roll =
+				*/
+				m.addFloatArg( m_eggavatar[0].getPitch() ) ; 
+				m.addFloatArg( m_eggavatar[0].getYaw() ) ; 
+				m.addFloatArg( m_eggavatar[0].getRoll() ) ; 
+				
+				oscSender->sendMessage( m ) ; 
 			}
         }
     }

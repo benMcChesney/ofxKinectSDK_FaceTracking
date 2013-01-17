@@ -7,6 +7,7 @@ void testApp::setup(){
 	cout << "listening for osc messages on port " << PORT << "\n";
 	receiver.setup(PORT);
 
+
 	current_msg_string = 0;
 
 	ofBackground(30, 30, 130);
@@ -45,7 +46,22 @@ void testApp::setup(){
 	bResetData = false ; 
 	bConnectSender = false ; 
 
+	bDebugData  = false ; 
+	debugMouthHeight = 0.0f ; 
+	debugMouthWidth  = 0.0f; 
+	debugEyebrowRight = 0.0f ; 
+	debugEyebrowLeft = 0.0f ; 
+
+	debugPitch = 0.0f ; 
+	debugYaw = 0.0f ; 
+	debugRoll = 0.0f ;
+
 	setupUI( ) ; 
+	head_pitch = 0.0f ; 
+	head_yaw = 0.0f ; 
+	head_roll = 0.0f ; 
+
+	
 }
 
 //--------------------------------------------------------------
@@ -60,104 +76,171 @@ void testApp::update(){
 		}
 	}
 
-	// check for waiting messages
-	while(receiver.hasWaitingMessages()){
-		// get the next message
-		ofxOscMessage m;
-		receiver.getNextMessage(&m);
+	if ( bDebugData == false ) 
+	{
+		// check for waiting messages
+		while(receiver.hasWaitingMessages()){
+			// get the next message
+			ofxOscMessage m;
+			receiver.getNextMessage(&m);
 
-		
-		// check for mouse moved message
-		if(m.getAddress() == "faceMesh/")
-		{
-			int numFacePoints = m.getNumArgs() ; 
-			if ( numFacePoints > 45 ) 
+			bool bFaceRecieved = false ; 
+			// check for mouse moved message
+			if( bFaceRecieved == false && m.getAddress() == "faceMesh/")
 			{
-				//cout << "numFacePoints " << numFacePoints << endl ; 
-				//faceTriangulate.reset() ; 
-				bool addPoints = false ; 
-				if ( lerpedPoints.size() < 1 ) 
-					addPoints = true ; 
+				int numFacePoints = m.getNumArgs() ; 
+				if ( numFacePoints > 45 ) 
+				{
+					bFaceRecieved= true ; 
+					//cout << "numFacePoints " << numFacePoints << endl ; 
+					//faceTriangulate.reset() ; 
+					bool addPoints = false ; 
+					if ( lerpedPoints.size() < 1 ) 
+						addPoints = true ; 
 
 			
-				faceCentroid = ofPoint() ; 
-				rawMesh.clear( ); 
-				//Set default high so they get overwritten
-				faceBounds = ofRectangle( 10000 , 100000 , -10000 , -10000 ) ; 
-				for ( int p = 0 ; p < (numFacePoints) ; p+=2 ) 
-				{
-
-					ofPoint _p = ofPoint ( m.getArgAsFloat(p) , m.getArgAsFloat(p+1) ) ;
-					int i = p / 2 ; 
-
-					if ( i < VERTS_PER_FACE ) 
+					faceCentroid = ofPoint() ; 
+					rawMesh.clear( ); 
+					//Set default high so they get overwritten
+					faceBounds = ofRectangle( 10000 , 100000 , -10000 , -10000 ) ; 
+					for ( int p = 0 ; p < (numFacePoints) ; p+=2 ) 
 					{
-						rawMesh.addVertex( _p ) ; 
-						lerpedPoints[i] = lerpedPoints[i].interpolate( _p , facePointSmoothing ) ; 
-						faceCentroid += lerpedPoints[i] ; 
 
-						if ( lerpedPoints[i].x < faceBounds.x ) 
-							faceBounds.x = lerpedPoints[i].x ; 
-						if ( lerpedPoints[i].y < faceBounds.y ) 
-							faceBounds.y = lerpedPoints[i].y ;
-						if ( lerpedPoints[i].x > faceBounds.width )
-							faceBounds.width = lerpedPoints[i].x ; 
-						if ( lerpedPoints[i].y > faceBounds.height ) 
-							faceBounds.height = lerpedPoints[i].y ; 
+						ofPoint _p = ofPoint ( m.getArgAsFloat(p) , m.getArgAsFloat(p+1) ) ;
+						int i = p / 2 ; 
+
+						if ( i < VERTS_PER_FACE ) 
+						{
+							rawMesh.addVertex( _p ) ; 
+							lerpedPoints[i] = lerpedPoints[i].interpolate( _p , facePointSmoothing ) ; 
+							faceCentroid += lerpedPoints[i] ; 
+
+							if ( lerpedPoints[i].x < faceBounds.x ) 
+								faceBounds.x = lerpedPoints[i].x ; 
+							if ( lerpedPoints[i].y < faceBounds.y ) 
+								faceBounds.y = lerpedPoints[i].y ;
+							if ( lerpedPoints[i].x > faceBounds.width )
+								faceBounds.width = lerpedPoints[i].x ; 
+							if ( lerpedPoints[i].y > faceBounds.height ) 
+								faceBounds.height = lerpedPoints[i].y ; 
 
 
-					//	Tweenzor::add( &lerpedPoints[i].x , lerpedPoints[i].x , _p.x , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
-					//	Tweenzor::add( &lerpedPoints[i].y , lerpedPoints[i].x , _p.y , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
+						//	Tweenzor::add( &lerpedPoints[i].x , lerpedPoints[i].x , _p.x , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
+						//	Tweenzor::add( &lerpedPoints[i].y , lerpedPoints[i].x , _p.y , 0.0f , 0.12f , EASE_OUT_QUAD ) ; 
+						}
+					}
+
+					faceCentroid /= ( float ) VERTS_PER_FACE ; 
+				}
+			
+			}
+			else if ( m.getAddress() == "pitch_yaw_roll/" )
+			{
+				//cout << "getting yaw pitch and roll ! " << endl ; 
+			
+				head_pitch = m.getArgAsFloat( 0 ) ; 
+				head_yaw = m.getArgAsFloat( 1 ) ;
+				head_roll = m.getArgAsFloat( 2 ) ; 
+				//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
+				ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1,0,0 ) ); 
+				ofQuaternion yRot( ofRadToDeg( head_yaw ) -90 , ofVec3f( 0,1,0 ) ); 
+				ofQuaternion zRot( ofRadToDeg( head_roll ) , ofVec3f( 0,0,1 ) ); 
+    
+				headOrientation = xRot * yRot * zRot ; 
+				
+			}
+			else
+			{
+				// unrecognized message: display on the bottom of the screen
+				string msg_string;
+				msg_string = m.getAddress();
+				msg_string += ": ";
+				for(int i = 0; i < m.getNumArgs(); i++){
+					// get the argument type
+					msg_string += m.getArgTypeName(i);
+					msg_string += ":";
+					// display the argument - make sure we get the right type
+					if(m.getArgType(i) == OFXOSC_TYPE_INT32){
+						msg_string += ofToString(m.getArgAsInt32(i));
+					}
+					else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT){
+						msg_string += ofToString(m.getArgAsFloat(i));
+					}
+					else if(m.getArgType(i) == OFXOSC_TYPE_STRING){
+						msg_string += m.getArgAsString(i);
+					}
+					else{
+						msg_string += "unknown";
 					}
 				}
-
-				faceCentroid /= ( float ) VERTS_PER_FACE ; 
+				// add to the list of strings to display
+				msg_strings[current_msg_string] = msg_string;
+				timers[current_msg_string] = ofGetElapsedTimef() + 5.0f;
+				current_msg_string = (current_msg_string + 1) % NUM_MSG_STRINGS;
+				// clear the next line
+				msg_strings[current_msg_string] = "";
 			}
-			
-		}
-		else{
-			// unrecognized message: display on the bottom of the screen
-			string msg_string;
-			msg_string = m.getAddress();
-			msg_string += ": ";
-			for(int i = 0; i < m.getNumArgs(); i++){
-				// get the argument type
-				msg_string += m.getArgTypeName(i);
-				msg_string += ":";
-				// display the argument - make sure we get the right type
-				if(m.getArgType(i) == OFXOSC_TYPE_INT32){
-					msg_string += ofToString(m.getArgAsInt32(i));
-				}
-				else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT){
-					msg_string += ofToString(m.getArgAsFloat(i));
-				}
-				else if(m.getArgType(i) == OFXOSC_TYPE_STRING){
-					msg_string += m.getArgAsString(i);
-				}
-				else{
-					msg_string += "unknown";
-				}
-			}
-			// add to the list of strings to display
-			msg_strings[current_msg_string] = msg_string;
-			timers[current_msg_string] = ofGetElapsedTimef() + 5.0f;
-			current_msg_string = (current_msg_string + 1) % NUM_MSG_STRINGS;
-			// clear the next line
-			msg_strings[current_msg_string] = "";
 		}
 
-	}
-
-	if ( lerpedPoints.size() > 0 ) 
-	{
-		faceTriangulate.reset() ; 
-		for ( int i = 0 ; i < VERTS_PER_FACE ; i++ ) 
+		if ( lerpedPoints.size() > 0 ) 
 		{
-			faceTriangulate.addPoint ( lerpedPoints[i] ) ;
+			faceTriangulate.reset() ; 
+			for ( int i = 0 ; i < VERTS_PER_FACE ; i++ ) 
+			{
+				faceTriangulate.addPoint ( lerpedPoints[i] ) ;
+			}
+			faceTriangulate.triangulate() ; 
 		}
-		faceTriangulate.triangulate() ; 
+	}
+	else
+	{
+		if ( bConnectSender == true ) 
+		{
+			//Faking the data ! 
+			ofxOscMessage m1 ;
+			m1.setAddress( "/" + featureRelations[0].label ) ; 
+			m1.addFloatArg( debugMouthHeight ) ; 
+			cout << "debugMouthHeight " << debugMouthHeight << endl; 
+			sender.sendMessage( m1 ) ; 
 
-		
+			ofxOscMessage m2 ;
+			m2.setAddress( "/" + featureRelations[1].label ) ; 
+			m2.addFloatArg( debugMouthWidth ) ; 
+			sender.sendMessage( m2 ) ; 
+
+			ofxOscMessage m3 ;
+			m3.setAddress( "/" + featureRelations[2].label ) ; 
+			m3.addFloatArg( debugEyebrowRight ) ; 
+			sender.sendMessage( m3 ) ; 
+
+			ofxOscMessage m4 ;
+			m4.setAddress( "/" + featureRelations[3].label ) ; 
+			m4.addFloatArg( debugEyebrowLeft ) ; 
+			sender.sendMessage( m4 ) ; 
+
+			ofxOscMessage m5 ;
+			m5.setAddress( "/pitch" ) ; 
+			m5.addFloatArg( debugPitch ) ; 
+			sender.sendMessage( m5 ) ; 
+
+			ofxOscMessage m6 ;
+			m6.setAddress( "/yaw" ) ; 
+			m6.addFloatArg( debugYaw ) ; 
+			sender.sendMessage( m6 ) ; 
+
+			ofxOscMessage m7 ;
+			m7.setAddress( "/roll" ) ; 
+			m7.addFloatArg( debugRoll ) ; 
+			sender.sendMessage( m7 ) ;
+
+			ofQuaternion xRot( debugPitch, ofVec3f( 1,0,0 ) ); 
+			ofQuaternion yRot( debugYaw -90 , ofVec3f( 0,1,0 ) ); 
+			ofQuaternion zRot( debugRoll , ofVec3f( 0,0,1 ) ); 
+    
+				headOrientation = xRot * yRot * zRot ; 
+			return ; 
+		}
+
 	}
 
 	int meshSize = rawMesh.getNumVertices() ; 
@@ -199,13 +282,14 @@ void testApp::update(){
 void testApp::draw(){
 
 	ofEnableAlphaBlending() ; 
+	/*
 	string buf;
 	buf = "listening for osc messages on port" + ofToString(PORT) + "\n" + "t - training face? " + ofToString( bTraining ) ;
 	ofDrawBitmapString(buf, 10, 20);
 
 	for(int i = 0; i < NUM_MSG_STRINGS; i++){
 		ofDrawBitmapString(msg_strings[i], 10, 40 + 15 * i);
-	}
+	}*/
 
 	ofFill( ) ; 
 	ofSetColor( 250 , 250 , 212 , 68) ; 
@@ -283,6 +367,24 @@ void testApp::draw(){
 		}
 	}
 
+	ofVec3f axis;  
+    float angle;  
+    headOrientation.getRotate(angle, axis);  
+
+	ofPushMatrix() ; 
+
+		ofTranslate( ofGetWidth() - 100 , ofGetHeight() / 2 , 0 ) ; 
+		//apply the quaternion's rotation to the viewport and draw the sphere
+		
+		ofRotate(angle, axis.x, axis.y, axis.z);  
+		
+		ofSetColor( 255 , 255 , 255 ) ; 
+		ofNoFill() ; 
+		
+		ofDrawAxis( 125 ) ; 
+		ofSphere( 0 , 0 , 0 , 50 );
+		ofFill() ; 
+	ofPopMatrix() ; 
 }
 
 //--------------------------------------------------------------
@@ -421,8 +523,17 @@ void testApp::setupUI ( )
 	//gui->addWidgetDown(new ofxUISlider(length-xInit,dim, 0.0, 255.0, red, "RED")); 
 	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "ENABLE TRAINING")); 
 	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "RESET TRAINING DATA")); 
-	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "CONNECT SENDER OSC"));
 	gui->addWidgetDown(new ofxUITextInput( length-xInit, "SENDING PORT", ofToString( sendPort ) , OFX_UI_FONT_LARGE)); 
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "CONNECT SENDER OSC"));
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, bDebugData, "TOGGLE DEBUG DATA"));
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugMouthHeight , "DEBUG MOUTH HEIGHT")); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugMouthWidth , "DEBUG MOUTH WIDTH")); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugEyebrowRight , "DEBUG EYEBROW RIGHT")); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugEyebrowLeft , "DEBUG EYEBROW LEFT")); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 360.0, debugPitch , "DEBUG PTICH" )); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 360.0, debugYaw , "DEBUG YAW" )); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 360.0, debugRoll , "DEBUG ROll" )); 
+
 	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
 
 	gui->loadSettings( "gui/paramSettings.xml" ) ; 
@@ -434,20 +545,29 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 	int kind = e.widget->getKind(); 
 
 	/*
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, bDebugData, "TOGGLE DEBUG DATA"));
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugMouthHeight , "DEBUG MOUTH HEIGHT")); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugMouthWidth , "DEBUG MOUTH WIDTH")); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugEyebrowRight , "DEBUG EYEBROW RIGHT")); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugEyebrowLeft , "DEBUG EYEBROW LEFT")); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugPitch , "DEBUG PTICH" )); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugYaw , "DEBUG YAW" )); 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, debugRoll , "DEBUG ROll" )); 
+	*/
+	if(name ==  "TOGGLE DEBUG DATA" ) 
+	{
+		bDebugData = ( (ofxUIToggle *) e.widget )->getValue() ; 
+	}
 
-	case 't':
-		case 'T':
-			bTraining = !bTraining ; 
-			break ; 
+	if(name ==  "DEBUG MOUTH HEIGHT" ) debugMouthHeight = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
+	if(name ==  "DEBUG MOUTH WIDTH" ) debugMouthWidth = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
+	if(name ==  "DEBUG EYEBROW RIGHT" ) debugEyebrowRight = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
+	if(name ==  "DEBUG EYEBROW LEFT" ) debugEyebrowLeft = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
+	if(name ==  "DEBUG PTICH" ) debugPitch = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
+	if(name ==  "DEBUG YAW" ) debugYaw = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
+	if(name ==  "DEBUG ROll" ) debugRoll = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
 
-		case 'r':
-		case 'R':
-			for ( int i = 0 ; i < featureRelations.size() ; i++ ) 
-		{
-			featureRelations[i].resetTraining() ;  
-		}
-		//bConnectSender
-		*/
+
 	if(name == "ENABLE TRAINING") 
 	{
 		bTraining = ( (ofxUIToggle *) e.widget )->getValue() ; 

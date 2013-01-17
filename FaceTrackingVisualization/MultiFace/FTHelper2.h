@@ -7,6 +7,7 @@
 #pragma once
 #include <FaceTrackLib.h>
 #include "KinectSensor.h"
+#include "ofxOsc.h"
 
 struct FTHelperContext
 {
@@ -39,6 +40,7 @@ public:
     BOOL GetDrawMask()                      { return(m_DrawMask);}
     IFTFaceTracker* GetTracker(UINT userId) { return(m_UserContext[userId].m_pFaceTracker);}
     HRESULT GetCameraConfig(FT_CAMERA_CONFIG* cameraConfig);
+	void setupOsc( ofxOscSender * _osc ) ; 
 
 private:
     KinectSensor                m_KinectSensor;

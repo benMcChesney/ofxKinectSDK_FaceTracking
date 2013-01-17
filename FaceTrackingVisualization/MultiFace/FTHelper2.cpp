@@ -7,7 +7,7 @@
 #include "StdAfx.h"
 #include "FTHelper2.h"
 #include "Visualize.h"
-#include "ofxOsc.h"
+
 
 #ifdef SAMPLE_OPTIONS
 #include "Options.h"
@@ -16,12 +16,9 @@ PVOID _opt = NULL;
 #endif
 
 
-// listen on port 12345
-#define HOST "localhost"
-#define PORT 12345
-#define NUM_MSG_STRINGS 20
 
-ofxOscSender sender;
+
+ofxOscSender * sender;
 /*
 */
 
@@ -47,9 +44,14 @@ FTHelper2::FTHelper2()
     m_colorType = NUI_IMAGE_TYPE_COLOR;
     m_colorRes = NUI_IMAGE_RESOLUTION_INVALID;
 	m_bSeatedSkeleton = FALSE;
-	sender.setup(HOST, PORT);
+	
 }
 
+void FTHelper2::setupOsc( ofxOscSender * _osc ) 
+{
+	sender = _osc ; 
+	//sender->setup(HOST, PORT);
+}
 FTHelper2::~FTHelper2()
 {
     Stop();
@@ -197,7 +199,7 @@ BOOL FTHelper2::SubmitFraceTrackingResult(IFTResult* pResult, UINT userId)
 									m.addFloatArg( p3DMdl[i].x );
 									m.addFloatArg( p3DMdl[i].y );
 								}
-								sender.sendMessage(m);
+								sender->sendMessage(m);
 									/*
 									pFaceModel2DPoint[ipt].x = LONG(pPts2D[ipt].x + 0.5f);
 									pFaceModel2DPoint[ipt].y = LONG(pPts2D[ipt].y + 0.5f);*/

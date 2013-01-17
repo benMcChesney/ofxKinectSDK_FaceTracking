@@ -9,12 +9,52 @@
     <Value>0</Value>
 </Widget>
 <Widget>
+    <Kind>12</Kind>
+    <Name>SENDING PORT</Name>
+    <Value>54321</Value>
+</Widget>
+<Widget>
     <Kind>2</Kind>
     <Name>CONNECT SENDER OSC</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
-    <Kind>12</Kind>
-    <Name>SENDING PORT</Name>
-    <Value>54321</Value>
+    <Kind>2</Kind>
+    <Name>TOGGLE DEBUG DATA</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>DEBUG MOUTH HEIGHT</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>DEBUG MOUTH WIDTH</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>DEBUG EYEBROW RIGHT</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>DEBUG EYEBROW LEFT</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>DEBUG PTICH</Name>
+    <Value>135</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>DEBUG YAW</Name>
+    <Value>91.1842</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>DEBUG ROll</Name>
+    <Value>198.947</Value>
 </Widget>

@@ -74,6 +74,10 @@ public:
     BOOL DrawImage(IFTImage* pImage);
     BOOL DrawBgLine(IFTImage* pImage, float x1, float y1, float x2, float y2, UINT32 color);
 
+	float getPitch( ) { return m_Pitch ; }   
+	float getYaw( ) { return m_Yaw ; } 
+	float getRoll( ) { return m_Roll ; } 
+
 private:
     float m_FacePointLatLon[NumberFacePoints][2];
     float m_FacePointXYZ[NumberTotalPoints][3];
