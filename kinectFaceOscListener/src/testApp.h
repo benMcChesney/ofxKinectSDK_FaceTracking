@@ -80,4 +80,8 @@ class testApp : public ofBaseApp {
 		float debugPitch ; 
 		float debugYaw ; 
 		float debugRoll ;
+
+		bool bSendFeatureData ; 
+		bool bSendFaceActive ; 
+		bool bSendOrientation ; 
 };

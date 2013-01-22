@@ -229,35 +229,45 @@ void testApp::update(){
 	{
 		if ( bConnectSender == true ) 
 		{
-			//Faking the data ! 
-			ofxOscMessage m1 ;
-			m1.setAddress( "/" + featureRelations[0].label ) ; 
-			m1.addFloatArg( debugMouthHeight ) ; 
-			cout << "debugMouthHeight " << debugMouthHeight << endl; 
-			sender.sendMessage( m1 ) ; 
+			/*
+			
+			bool bSendFeatureData ; 
+		bool bSendFaceActive ; 
+		bool bSendOrientation ;
+		*/
+			if ( bSendFeatureData == true ) 
+			{
+				//Faking the data ! 
+				ofxOscMessage m1 ;
+				m1.setAddress( "/" + featureRelations[0].label ) ; 
+				m1.addFloatArg( debugMouthHeight ) ; 
+				cout << "debugMouthHeight " << debugMouthHeight << endl; 
+				sender.sendMessage( m1 ) ; 
 
-			ofxOscMessage m2 ;
-			m2.setAddress( "/" + featureRelations[1].label ) ; 
-			m2.addFloatArg( debugMouthWidth ) ; 
-			sender.sendMessage( m2 ) ; 
+				ofxOscMessage m2 ;
+				m2.setAddress( "/" + featureRelations[1].label ) ; 
+				m2.addFloatArg( debugMouthWidth ) ; 
+				sender.sendMessage( m2 ) ; 
 
-			ofxOscMessage m3 ;
-			m3.setAddress( "/" + featureRelations[2].label ) ; 
-			m3.addFloatArg( debugEyebrowRight ) ; 
-			sender.sendMessage( m3 ) ; 
+				ofxOscMessage m3 ;
+				m3.setAddress( "/" + featureRelations[2].label ) ; 
+				m3.addFloatArg( debugEyebrowRight ) ; 
+				sender.sendMessage( m3 ) ; 
 
-			ofxOscMessage m4 ;
-			m4.setAddress( "/" + featureRelations[3].label ) ; 
-			m4.addFloatArg( debugEyebrowLeft ) ; 
-			sender.sendMessage( m4 ) ; 
-
-			ofxOscMessage m5 ;
-			m5.setAddress( "/pitch_yaw_roll" ) ; 
-			m5.addFloatArg( debugPitch ) ; 
-			m5.addFloatArg( debugYaw ) ; 
-			m5.addFloatArg( debugRoll ) ; 
-			sender.sendMessage( m5 ) ; 
-
+				ofxOscMessage m4 ;
+				m4.setAddress( "/" + featureRelations[3].label ) ; 
+				m4.addFloatArg( debugEyebrowLeft ) ; 
+				sender.sendMessage( m4 ) ; 
+			}
+			if ( bSendOrientation == true ) 
+			{
+				ofxOscMessage m5 ;
+				m5.setAddress( "/pitch_yaw_roll" ) ; 
+				m5.addFloatArg( debugPitch ) ; 
+				m5.addFloatArg( debugYaw ) ; 
+				m5.addFloatArg( debugRoll ) ; 
+				sender.sendMessage( m5 ) ; 
+			}
 	
 			ofQuaternion xRot( debugPitch, ofVec3f( 1,0,0 ) ); 
 			ofQuaternion yRot( debugYaw -90 , ofVec3f( 0,1,0 ) ); 
@@ -268,50 +278,60 @@ void testApp::update(){
 		}
 
 	}
-
-	int meshSize = rawMesh.getNumVertices() ; 
-	if ( meshSize > 0 ) 
+	else
 	{
-		for ( int i = 0 ; i < featureRelations.size() ; i++ ) 
-		{
-			featureRelations[i].update( rawMesh.getVertex( featureRelations[i].meshIndex1 ) ,
-									    rawMesh.getVertex( featureRelations[i].meshIndex2 ) , bTraining ) ;  
-
-		}
-	}
-	
-	if ( lerpedPoints.size() > 0 ) 
-	{
-		if ( bConnectSender == true ) 
+		int meshSize = rawMesh.getNumVertices() ; 
+		if ( meshSize > 0 ) 
 		{
 			for ( int i = 0 ; i < featureRelations.size() ; i++ ) 
 			{
-				ofxOscMessage m ;
-	
-				m.clear() ; 
-				m.setAddress( "/" + featureRelations[i].label ) ; 
-				m.addFloatArg( featureRelations[i].ratio ) ; 
+				featureRelations[i].update( rawMesh.getVertex( featureRelations[i].meshIndex1 ) ,
+											rawMesh.getVertex( featureRelations[i].meshIndex2 ) , bTraining ) ;  
 
-				sender.sendMessage( m ) ; 
-				
-				//featureRelations[i].update( rawMesh.getVertex( featureRelations[i].meshIndex1 ) ,
-				//rawMesh.getVertex( featureRelations[i].meshIndex2 ) , bTraining ) ; 
 			}
+		}
+	
+		if ( lerpedPoints.size() > 0 ) 
+		{
+			if ( bConnectSender == true ) 
+			{
+				if ( bSendFeatureData == true ) 
+				{
+					for ( int i = 0 ; i < featureRelations.size() ; i++ ) 
+					{
+						ofxOscMessage m ;
+	
+						m.clear() ; 
+						m.setAddress( "/" + featureRelations[i].label ) ; 
+						m.addFloatArg( featureRelations[i].ratio ) ; 
 
-			ofxOscMessage m1 ;
-			m1.setAddress( "/pitch_yaw_roll" ) ; 
-			m1.addFloatArg( ofRadToDeg( head_pitch ) ) ; 
-			m1.addFloatArg( ofRadToDeg( head_yaw ) ) ; 
-			m1.addFloatArg( ofRadToDeg( head_roll ) ) ; 
-			sender.sendMessage( m1 ) ; 
-			
-			ofxOscMessage m2 ; 
-			m2.setAddress( "/bFaceActive" ) ; 
-			m2.addIntArg( (int) bFaceRecieved ) ; 
-			sender.sendMessage( m2 ) ; 
+						sender.sendMessage( m ) ; 
+				
+						//featureRelations[i].update( rawMesh.getVertex( featureRelations[i].meshIndex1 ) ,
+						//rawMesh.getVertex( featureRelations[i].meshIndex2 ) , bTraining ) ; 
+					}
+				}
+
+				if ( bSendOrientation == true ) 
+				{
+					ofxOscMessage m1 ;
+					m1.setAddress( "/pitch_yaw_roll" ) ; 
+					m1.addFloatArg( ofRadToDeg( head_pitch ) ) ; 
+					m1.addFloatArg( ofRadToDeg( head_yaw ) ) ; 
+					m1.addFloatArg( ofRadToDeg( head_roll ) ) ; 
+					sender.sendMessage( m1 ) ; 
+				}
+
+				if ( bSendFaceActive == true ) 
+				{
+					ofxOscMessage m2 ; 
+					m2.setAddress( "/bFaceActive" ) ; 
+					m2.addIntArg( (int) bFaceRecieved ) ; 
+					sender.sendMessage( m2 ) ; 
+				}
+			}
 		}
 	}
-
 	if ( bFaceMeshRecieved == false ) 
 	{
 		if ( lastFaceDetected > 0 && ofGetElapsedTimef() > ( lastFaceDetected + faceDecayDelay ) )
@@ -592,6 +612,10 @@ void testApp::setupUI ( )
 	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 360.0, debugYaw , "DEBUG YAW" )); 
 	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 360.0, debugRoll , "DEBUG ROll" )); 
 
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "SEND FEATURE DATA"));
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "SEND FACE ACTIVE"));
+	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "SEND ORIENTATION"));
+
 	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
 
 	gui->loadSettings( "gui/paramSettings.xml" ) ; 
@@ -675,6 +699,10 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 		sendPort = ofToInt( output ) ; 
         cout << output << endl; 
 	}
+
+	if(name == "SEND FEATURE DATA")	bSendFeatureData = ( (ofxUIToggle *) e.widget )->getValue() ; 
+	if(name == "SEND FACE ACTIVE")	bSendFaceActive = ( (ofxUIToggle *) e.widget )->getValue() ; 
+	if(name == "SEND ORIENTATION")	bSendOrientation = ( (ofxUIToggle *) e.widget )->getValue() ; 
 
 	gui->saveSettings( "gui/paramSettings.xml" ) ; 
 

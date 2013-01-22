@@ -58,3 +58,18 @@
     <Name>DEBUG ROll</Name>
     <Value>198.947</Value>
 </Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>SEND FEATURE DATA</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>SEND FACE ACTIVE</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>SEND ORIENTATION</Name>
+    <Value>0</Value>
+</Widget>
