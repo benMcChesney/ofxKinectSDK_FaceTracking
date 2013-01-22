@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 
+	Tweenzor::init() ; 
 	// listen on the given port
 	cout << "listening for osc messages on port " << PORT << "\n";
 	receiver.setup(PORT);
@@ -11,7 +12,7 @@ void testApp::setup(){
 	current_msg_string = 0;
 
 	ofBackground(30, 30, 130);
-	ofSetFrameRate( 30 ); 
+	ofSetFrameRate( 60 ); 
 	faceTriangulate.reset() ; 
 	facePointSmoothing = 0.5f ; 
 
@@ -56,19 +57,23 @@ void testApp::setup(){
 	debugYaw = 0.0f ; 
 	debugRoll = 0.0f ;
 
-	setupUI( ) ; 
 	head_pitch = 0.0f ; 
 	head_yaw = 0.0f ; 
 	head_roll = 0.0f ; 
 
 	faceDecayDelay = 0.5f ; 
 	lastFaceDetected = -1 ; 
-	bFaceRecieved = false ; 
+
+	interpolateOrientationTime = 0.0f ; 
+
+	setupUI( ) ; 
+	
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 
+	Tweenzor::update( ofGetElapsedTimeMillis() ) ; 
 
 	ofSetWindowTitle( "FPS: "+ ofToString( ofGetFrameRate() )) ; 
 	// hide old messages
@@ -162,9 +167,16 @@ void testApp::update(){
 				//cout << "getting yaw pitch and roll ! " << endl ; 
 				if ( bDebugData == false ) 
 				{
-					head_pitch = m.getArgAsFloat( 0 ) ; 
-					head_yaw = m.getArgAsFloat( 1 ) ;
-					head_roll = m.getArgAsFloat( 2 ) ; 
+					float _head_pitch = m.getArgAsFloat( 0 ) ; 
+					float _head_yaw = m.getArgAsFloat( 1 ) ;
+					float _head_roll = m.getArgAsFloat( 2 ) ; 
+					/*
+
+					interpolateOrientationTime
+					*/
+					Tweenzor::add( &head_pitch , head_pitch , _head_pitch , 0.0f, interpolateOrientationTime , EASE_LINEAR ) ; 
+					Tweenzor::add( &head_yaw , head_yaw , _head_yaw , 0.0f, interpolateOrientationTime , EASE_LINEAR ) ; 
+					Tweenzor::add( &head_roll , head_roll , _head_roll , 0.0f, interpolateOrientationTime , EASE_LINEAR ) ; 
 					//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
 					ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1,0,0 ) ); 
 					ofQuaternion yRot( ofRadToDeg( head_yaw ) , ofVec3f( 0,1,0 ) ); 
@@ -229,19 +241,13 @@ void testApp::update(){
 	{
 		if ( bConnectSender == true ) 
 		{
-			/*
-			
-			bool bSendFeatureData ; 
-		bool bSendFaceActive ; 
-		bool bSendOrientation ;
-		*/
 			if ( bSendFeatureData == true ) 
 			{
 				//Faking the data ! 
 				ofxOscMessage m1 ;
 				m1.setAddress( "/" + featureRelations[0].label ) ; 
 				m1.addFloatArg( debugMouthHeight ) ; 
-				cout << "debugMouthHeight " << debugMouthHeight << endl; 
+				//cout << "debugMouthHeight " << debugMouthHeight << endl; 
 				sender.sendMessage( m1 ) ; 
 
 				ofxOscMessage m2 ;
@@ -616,6 +622,8 @@ void testApp::setupUI ( )
 	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "SEND FACE ACTIVE"));
 	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "SEND ORIENTATION"));
 
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, interpolateOrientationTime , "INTERPOLATE ORIENTATION TIME")); 
+	//interpolateOrientationTime
 	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
 
 	gui->loadSettings( "gui/paramSettings.xml" ) ; 
@@ -648,7 +656,10 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 	if(name ==  "DEBUG PTICH" ) debugPitch = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
 	if(name ==  "DEBUG YAW" ) debugYaw = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
 	if(name ==  "DEBUG ROll" ) debugRoll = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
+	if(name ==  "INTERPOLATE ORIENTATION TIME" ) interpolateOrientationTime = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
 
+
+//	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, interpolateOrientationTime , "INTERPOLATE ORIENTATION TIME")); 
 
 	if(name == "ENABLE TRAINING") 
 	{

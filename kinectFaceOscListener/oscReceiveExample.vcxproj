@@ -57,7 +57,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxOsc\libs;..\..\..\addons\ofxOsc\libs\oscpack;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxOsc\src;src;..\..\..\addons\ofxDelaunay\libs\Delaunay;..\..\..\addons\ofxDelaunay\src;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxUI\src;..\..\..\addons\ofxXmlSettings\libs</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxOsc\libs;..\..\..\addons\ofxOsc\libs\oscpack;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxOsc\src;src;..\..\..\addons\ofxDelaunay\libs\Delaunay;..\..\..\addons\ofxDelaunay\src;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxUI\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxTweenzor\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -100,6 +100,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\addons\ofxDelaunay\libs\Delaunay\Delaunay.cpp" />
     <ClCompile Include="..\..\..\addons\ofxDelaunay\src\ofxDelaunay.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxTweenzor\src\Tween.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxTweenzor\src\Tweenzor.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
@@ -123,6 +125,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\ofxDelaunay\libs\Delaunay\Delaunay.h" />
     <ClInclude Include="..\..\..\addons\ofxDelaunay\src\ofxDelaunay.h" />
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\ofxTweenzor.h" />
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\Tween.h" />
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenEvent.h" />
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenFunctions.h" />
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\TweenSelector.h" />
+    <ClInclude Include="..\..\..\addons\ofxTweenzor\src\Tweenzor.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI2DPad.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIBiLabelSlider.h" />

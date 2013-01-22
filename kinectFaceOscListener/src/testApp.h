@@ -6,6 +6,7 @@
 #include "FeatureRelationship.h"
 #include "ofxXmlSettings.h"
 #include "ofxUI.h"
+#include "ofxTweenzor.h"
 
 // listen on port 12345
 #define PORT 12345
@@ -84,4 +85,6 @@ class testApp : public ofBaseApp {
 		bool bSendFeatureData ; 
 		bool bSendFaceActive ; 
 		bool bSendOrientation ; 
+
+		float interpolateOrientationTime ; 
 };
