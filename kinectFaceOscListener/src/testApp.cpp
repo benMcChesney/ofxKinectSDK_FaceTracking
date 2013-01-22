@@ -61,6 +61,7 @@ void testApp::setup(){
 	head_yaw = 0.0f ; 
 	head_roll = 0.0f ; 
 
+	bFaceActive = false ; 
 	faceDecayDelay = 0.5f ; 
 	lastFaceDetected = -1 ; 
 
@@ -115,7 +116,7 @@ void testApp::update(){
 						cout << "face detected first time on screen ! " << endl ;
 					}
 					lastFaceDetected = ofGetElapsedTimef() ; 
-					bFaceRecieved = true ; 
+					bFaceActive = true ; 
 					//cout << "numFacePoints " << numFacePoints << endl ; 
 					//faceTriangulate.reset() ; 
 					bool addPoints = false ; 
@@ -159,7 +160,7 @@ void testApp::update(){
 				else
 				{
 					cout << "NO  FACE " << endl ; 
-					bFaceRecieved = false ; 
+					bFaceActive = false ; 
 				}
 			}
 			else if ( m.getAddress() == "pitch_yaw_roll/" )
@@ -174,15 +175,21 @@ void testApp::update(){
 
 					interpolateOrientationTime
 					*/
-					Tweenzor::add( &head_pitch , head_pitch , _head_pitch , 0.0f, interpolateOrientationTime , EASE_LINEAR ) ; 
-					Tweenzor::add( &head_yaw , head_yaw , _head_yaw , 0.0f, interpolateOrientationTime , EASE_LINEAR ) ; 
-					Tweenzor::add( &head_roll , head_roll , _head_roll , 0.0f, interpolateOrientationTime , EASE_LINEAR ) ; 
+
+					head_pitch = ofLerp( head_pitch , _head_pitch , 0.5f ) ;
+					head_yaw = ofLerp( head_yaw , _head_yaw , 0.5f ) ;
+					head_roll = ofLerp( head_roll , _head_roll , 0.5f ) ;
+					//Tweenzor::add( &head_pitch , head_pitch , _head_pitch , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
+					//Tweenzor::add( &head_yaw , head_yaw , _head_yaw , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
+					//Tweenzor::add( &head_roll , head_roll , _head_roll , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
+					//Tweenzor::add( float , begin , end , delay , duration , 
 					//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
 					ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1,0,0 ) ); 
 					ofQuaternion yRot( ofRadToDeg( head_yaw ) , ofVec3f( 0,1,0 ) ); 
 					ofQuaternion zRot( ofRadToDeg( head_roll ) , ofVec3f( 0,0,1 ) ); 
     
 					headOrientation = xRot * yRot * zRot ; 
+					cout << "headPitch : " << head_pitch << endl ; 
 				}
 				
 			}
@@ -332,7 +339,7 @@ void testApp::update(){
 				{
 					ofxOscMessage m2 ; 
 					m2.setAddress( "/bFaceActive" ) ; 
-					m2.addIntArg( (int) bFaceRecieved ) ; 
+					m2.addIntArg( (int) bFaceActive ) ; 
 					sender.sendMessage( m2 ) ; 
 				}
 			}
@@ -350,7 +357,7 @@ void testApp::update(){
     
 			headOrientation = xRot * yRot * zRot ; 
 
-			bFaceRecieved = false ; 
+			bFaceActive = false ; 
 		}
 		
 	}
@@ -423,9 +430,6 @@ void testApp::draw(){
 		}
 	}
 
-	 
-
-
 	ofSetColor(ofColor::gray);
 	ofLine(nearestVertex, mouse);
 	
@@ -436,7 +440,7 @@ void testApp::draw(){
 	ofSetLineWidth(1);
 	
 	ofVec2f offset = ofVec2f(10, -10);
-	ofDrawBitmapStringHighlight( "is face active ? " + ofToString( bFaceRecieved ) , ofGetWidth() - 200 , ofGetHeight() - 200 ) ; 
+	ofDrawBitmapStringHighlight( "is face active ? " + ofToString( bFaceActive ) , ofGetWidth() - 200 , ofGetHeight() - 200 ) ; 
 	//if ( nearestIndex ) 
 	//	ofDrawBitmapStringHighlight( ofToString(nearestIndex) + "\nFaceDetected: " + ofToString( bFaceRecieved ) , mouse + offset);
 

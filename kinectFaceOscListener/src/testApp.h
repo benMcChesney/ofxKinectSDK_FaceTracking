@@ -55,7 +55,7 @@ class testApp : public ofBaseApp {
 
 		bool bTraining ;
 		bool bResetData ; 
-		bool bFaceRecieved ; 
+		bool bFaceActive ; 
 		float faceDecayDelay ; 
 		float lastFaceDetected ; 
 
