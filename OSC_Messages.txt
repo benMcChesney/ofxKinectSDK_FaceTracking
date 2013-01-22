@@ -1,0 +1,22 @@
+OSC message traveling from Open Frameworks -> Unity3D
+
+
+Feature sets ( include a float argument between 0 -1 )
+
+"/mouth_height" 
+[0] = float normalized
+"/mouth_wide"
+[0] = float normalized
+"/eyebrow_left"
+[0] = float
+"/eyebrow" 
+[0] = float normalized
+
+"/pitch_yaw_roll"
+[0] = float pitch
+[1] = float yaw
+[2] = float roll
+
+
+"/bFaceActive" 
+[0] int faceActive ( 0 = false , 1 = true ) 

@@ -76,7 +76,9 @@ public:
 
 	float getPitch( ) { return m_Pitch ; }   
 	float getYaw( ) { return m_Yaw ; } 
-	float getRoll( ) { return m_Roll ; } 
+	float getRoll( ) { return m_Roll ; }
+
+	bool getIsFacingUser( ) { return m_FacingUser ; }
 
 private:
     float m_FacePointLatLon[NumberFacePoints][2];

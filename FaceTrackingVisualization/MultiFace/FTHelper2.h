@@ -13,7 +13,7 @@ struct FTHelperContext
 {
     IFTFaceTracker*     m_pFaceTracker;
     IFTResult*          m_pFTResult;
-    FT_VECTOR3D         m_hint3D[2];
+    FT_VECTOR3D         m_hint3D[1];
     bool                m_LastTrackSucceeded;
     int                 m_CountUntilFailure;
     UINT                m_SkeletonId;
@@ -41,6 +41,9 @@ public:
     IFTFaceTracker* GetTracker(UINT userId) { return(m_UserContext[userId].m_pFaceTracker);}
     HRESULT GetCameraConfig(FT_CAMERA_CONFIG* cameraConfig);
 	void setupOsc( ofxOscSender * _osc ) ; 
+
+	bool getNumUsers(  ) { return m_nbUsers ;  } 
+	bool bFaceDetected ; 
 
 private:
     KinectSensor                m_KinectSensor;

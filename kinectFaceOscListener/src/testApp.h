@@ -54,6 +54,9 @@ class testApp : public ofBaseApp {
 
 		bool bTraining ;
 		bool bResetData ; 
+		bool bFaceRecieved ; 
+		float faceDecayDelay ; 
+		float lastFaceDetected ; 
 
 		//ofxUI
 		ofxUICanvas *gui;   	

@@ -59,7 +59,7 @@ protected:
 
 MultiFace::MultiFace(): m_hInst(NULL), 
     m_hWnd(NULL), 
-    m_nbUsers(2),
+    m_nbUsers(1),
     m_hAccelTable(NULL), 
     m_pVideoBuffer(NULL),
     m_pImageBuffer(NULL),

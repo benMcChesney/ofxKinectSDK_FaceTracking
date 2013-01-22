@@ -61,7 +61,9 @@ void testApp::setup(){
 	head_yaw = 0.0f ; 
 	head_roll = 0.0f ; 
 
-	
+	faceDecayDelay = 0.5f ; 
+	lastFaceDetected = -1 ; 
+	bFaceRecieved = false ; 
 }
 
 //--------------------------------------------------------------
@@ -76,22 +78,39 @@ void testApp::update(){
 		}
 	}
 
-	if ( bDebugData == false ) 
-	{
+	/*
+
+		bool bFaceRecieved ; 
+		float faceDecayDelay ; 
+
+		float lastFaceDetected ; */
+	//if ( bDebugData == false ) 
+//	{
 		// check for waiting messages
-		while(receiver.hasWaitingMessages()){
+		bool bFaceMeshRecieved = false ; 
+		while(receiver.hasWaitingMessages())
+		{
 			// get the next message
 			ofxOscMessage m;
 			receiver.getNextMessage(&m);
 
-			bool bFaceRecieved = false ; 
+		//	cout << "osc address " << m.getAddress() << " @ " << ofGetFrameNum() << endl ; 
+			
 			// check for mouse moved message
-			if( bFaceRecieved == false && m.getAddress() == "faceMesh/")
+			if( m.getAddress() == "faceMesh/")
 			{
+				
 				int numFacePoints = m.getNumArgs() ; 
+				bFaceMeshRecieved = true ; 
+				//cout << " # of face points : " << numFacePoints << endl ; 
 				if ( numFacePoints > 45 ) 
-				{
-					bFaceRecieved= true ; 
+				{ 
+					if ( lastFaceDetected < 0 ) 
+					{	
+						cout << "face detected first time on screen ! " << endl ;
+					}
+					lastFaceDetected = ofGetElapsedTimef() ; 
+					bFaceRecieved = true ; 
 					//cout << "numFacePoints " << numFacePoints << endl ; 
 					//faceTriangulate.reset() ; 
 					bool addPoints = false ; 
@@ -132,22 +151,33 @@ void testApp::update(){
 
 					faceCentroid /= ( float ) VERTS_PER_FACE ; 
 				}
-			
+				else
+				{
+					cout << "NO  FACE " << endl ; 
+					bFaceRecieved = false ; 
+				}
 			}
 			else if ( m.getAddress() == "pitch_yaw_roll/" )
 			{
 				//cout << "getting yaw pitch and roll ! " << endl ; 
-			
-				head_pitch = m.getArgAsFloat( 0 ) ; 
-				head_yaw = m.getArgAsFloat( 1 ) ;
-				head_roll = m.getArgAsFloat( 2 ) ; 
-				//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
-				ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1,0,0 ) ); 
-				ofQuaternion yRot( ofRadToDeg( head_yaw ) , ofVec3f( 0,1,0 ) ); 
-				ofQuaternion zRot( ofRadToDeg( head_roll ) , ofVec3f( 0,0,1 ) ); 
+				if ( bDebugData == false ) 
+				{
+					head_pitch = m.getArgAsFloat( 0 ) ; 
+					head_yaw = m.getArgAsFloat( 1 ) ;
+					head_roll = m.getArgAsFloat( 2 ) ; 
+					//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
+					ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1,0,0 ) ); 
+					ofQuaternion yRot( ofRadToDeg( head_yaw ) , ofVec3f( 0,1,0 ) ); 
+					ofQuaternion zRot( ofRadToDeg( head_roll ) , ofVec3f( 0,0,1 ) ); 
     
-				headOrientation = xRot * yRot * zRot ; 
+					headOrientation = xRot * yRot * zRot ; 
+				}
 				
+			}
+			else if ( m.getAddress() ==  "face_active/" )
+			{
+				int isActive = m.getArgAsInt32( 0 ) ; 
+				//cout << "isActive : " << isActive << endl ; 
 			}
 			else
 			{
@@ -182,17 +212,20 @@ void testApp::update(){
 			}
 		}
 
-		if ( lerpedPoints.size() > 0 ) 
-		{
-			faceTriangulate.reset() ; 
-			for ( int i = 0 ; i < VERTS_PER_FACE ; i++ ) 
+		if ( bDebugData == false )
+		{ 
+			if ( lerpedPoints.size() > 0 ) 
 			{
-				faceTriangulate.addPoint ( lerpedPoints[i] ) ;
+				faceTriangulate.reset() ; 
+				for ( int i = 0 ; i < VERTS_PER_FACE ; i++ ) 
+				{
+					faceTriangulate.addPoint ( lerpedPoints[i] ) ;
+				}
+				faceTriangulate.triangulate() ; 
 			}
-			faceTriangulate.triangulate() ; 
 		}
-	}
-	else
+	//}
+	if ( bDebugData == true ) 
 	{
 		if ( bConnectSender == true ) 
 		{
@@ -272,8 +305,30 @@ void testApp::update(){
 			m1.addFloatArg( ofRadToDeg( head_roll ) ) ; 
 			sender.sendMessage( m1 ) ; 
 			
+			ofxOscMessage m2 ; 
+			m2.setAddress( "/bFaceActive" ) ; 
+			m2.addIntArg( (int) bFaceRecieved ) ; 
+			sender.sendMessage( m2 ) ; 
 		}
 	}
+
+	if ( bFaceMeshRecieved == false ) 
+	{
+		if ( lastFaceDetected > 0 && ofGetElapsedTimef() > ( lastFaceDetected + faceDecayDelay ) )
+		{
+			cout << "face has timed out @ ! " << endl ; 
+			lastFaceDetected = -1 ; 
+			ofQuaternion xRot( 0 , ofVec3f( 1,0,0 ) ); 
+			ofQuaternion yRot( 0 , ofVec3f( 0,1,0 ) ); 
+			ofQuaternion zRot( 0 , ofVec3f( 0,0,1 ) ); 
+    
+			headOrientation = xRot * yRot * zRot ; 
+
+			bFaceRecieved = false ; 
+		}
+		
+	}
+	//cout << "do we have a face !?!?! : " << bFaceRecieved << " @ " << ofGetFrameNum() << endl; 
 }
 
 
@@ -329,7 +384,7 @@ void testApp::draw(){
 	int n = rawMesh.getNumVertices();
 	float nearestDistance = 0;
 	ofVec2f nearestVertex;
-	int nearestIndex;
+	int nearestIndex = 0 ;
 	ofVec2f mouse(mouseX, mouseY);
 	
 	for(int i = 0; i < n; i++) {
@@ -354,8 +409,10 @@ void testApp::draw(){
 	ofCircle(nearestVertex, 4);
 	ofSetLineWidth(1);
 	
-	ofVec2f offset(10, -10);
-	ofDrawBitmapStringHighlight(ofToString(nearestIndex), mouse + offset);
+	ofVec2f offset = ofVec2f(10, -10);
+	ofDrawBitmapStringHighlight( "is face active ? " + ofToString( bFaceRecieved ) , ofGetWidth() - 200 , ofGetHeight() - 200 ) ; 
+	//if ( nearestIndex ) 
+	//	ofDrawBitmapStringHighlight( ofToString(nearestIndex) + "\nFaceDetected: " + ofToString( bFaceRecieved ) , mouse + offset);
 
 	if ( lerpedPoints.size() > 0 ) 
 	{
@@ -384,6 +441,8 @@ void testApp::draw(){
 		ofSphere( 0 , 0 , 0 , 50 );
 		ofFill() ; 
 	ofPopMatrix() ; 
+
+
 }
 
 //--------------------------------------------------------------

@@ -23,6 +23,7 @@ ofxOscSender * sender;
 */
 
 
+
 FTHelper2::FTHelper2()
 {
     m_UserContext = 0;
@@ -44,7 +45,7 @@ FTHelper2::FTHelper2()
     m_colorType = NUI_IMAGE_TYPE_COLOR;
     m_colorRes = NUI_IMAGE_RESOLUTION_INVALID;
 	m_bSeatedSkeleton = FALSE;
-	
+	bFaceDetected = false ; 
 }
 
 void FTHelper2::setupOsc( ofxOscSender * _osc ) 
@@ -133,6 +134,7 @@ DWORD s_ColorCode[] = {0x00FFFF00, 0x00FF0000,  0x0000FF00, 0x0000FFFF, 0x00FF00
 
 BOOL FTHelper2::SubmitFraceTrackingResult(IFTResult* pResult, UINT userId)
 {
+	bFaceDetected = false ; 
     if (pResult != NULL && SUCCEEDED(pResult->GetStatus()))
     {
         if (m_CallBack)
@@ -200,21 +202,17 @@ BOOL FTHelper2::SubmitFraceTrackingResult(IFTResult* pResult, UINT userId)
 									m.addFloatArg( p3DMdl[i].y );
 								}
 								sender->sendMessage(m);
-									/*
-									pFaceModel2DPoint[ipt].x = LONG(pPts2D[ipt].x + 0.5f);
-									pFaceModel2DPoint[ipt].y = LONG(pPts2D[ipt].y + 0.5f);*/
-								}
-
-						
+								bFaceDetected = true ; 	
 							}
-
-					
-						}
+							
+						}					
 					}
 				}
+				
 			}
 			return TRUE;
 		}
+	}
 }
 
 // We compute here the nominal "center of attention" that is used when zooming the presented image.
