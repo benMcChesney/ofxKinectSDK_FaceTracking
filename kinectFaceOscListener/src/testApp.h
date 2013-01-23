@@ -87,4 +87,5 @@ class testApp : public ofBaseApp {
 		bool bSendOrientation ; 
 
 		float interpolateOrientationTime ; 
+		float headOrientationScale ; 
 };

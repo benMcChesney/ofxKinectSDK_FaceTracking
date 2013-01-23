@@ -12,7 +12,7 @@ void testApp::setup(){
 	current_msg_string = 0;
 
 	ofBackground(30, 30, 130);
-	ofSetFrameRate( 60 ); 
+	ofSetFrameRate( 30 ); 
 	faceTriangulate.reset() ; 
 	facePointSmoothing = 0.5f ; 
 
@@ -66,7 +66,7 @@ void testApp::setup(){
 	lastFaceDetected = -1 ; 
 
 	interpolateOrientationTime = 0.0f ; 
-
+	headOrientationScale = 1.0 ; 
 	setupUI( ) ; 
 	
 }
@@ -176,20 +176,20 @@ void testApp::update(){
 					interpolateOrientationTime
 					*/
 
-					head_pitch = ofLerp( head_pitch , _head_pitch , 0.5f ) ;
-					head_yaw = ofLerp( head_yaw , _head_yaw , 0.5f ) ;
-					head_roll = ofLerp( head_roll , _head_roll , 0.5f ) ;
+					head_pitch = ofLerp( head_pitch , _head_pitch , 0.5f ) * headOrientationScale ;
+					head_yaw = ofLerp( head_yaw , _head_yaw , 0.5f ) * headOrientationScale ;
+					head_roll = ofLerp( head_roll , _head_roll , 0.5f ) * headOrientationScale ;
 					//Tweenzor::add( &head_pitch , head_pitch , _head_pitch , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
 					//Tweenzor::add( &head_yaw , head_yaw , _head_yaw , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
 					//Tweenzor::add( &head_roll , head_roll , _head_roll , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
 					//Tweenzor::add( float , begin , end , delay , duration , 
 					//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
-					ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1,0,0 ) ); 
+					ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1 ,0,0 ) ); 
 					ofQuaternion yRot( ofRadToDeg( head_yaw ) , ofVec3f( 0,1,0 ) ); 
 					ofQuaternion zRot( ofRadToDeg( head_roll ) , ofVec3f( 0,0,1 ) ); 
     
 					headOrientation = xRot * yRot * zRot ; 
-					cout << "headPitch : " << head_pitch << endl ; 
+					
 				}
 				
 			}
@@ -473,6 +473,11 @@ void testApp::draw(){
 	ofPopMatrix() ; 
 
 
+	string status = "pitch : " + ofToString( ofRadToDeg(head_pitch) ) ; 
+	status += "\nyaw : " + ofToString( ofRadToDeg(head_yaw) ) ; 
+	status += "\nroll : " + ofToString( ofRadToDeg(head_roll) ) ;
+	ofDrawBitmapStringHighlight( status , ofGetWidth() - 250 , ofGetHeight() - 200 ) ;
+
 }
 
 //--------------------------------------------------------------
@@ -627,7 +632,8 @@ void testApp::setupUI ( )
 	gui->addWidgetDown(new ofxUIToggle( dim, dim, false, "SEND ORIENTATION"));
 
 	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, interpolateOrientationTime , "INTERPOLATE ORIENTATION TIME")); 
-	//interpolateOrientationTime
+	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.5, 10.0, headOrientationScale , "HEAD ORIENTATION SCALE")); 
+	//interpolateOrientationTime headOrientationScale
 	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
 
 	gui->loadSettings( "gui/paramSettings.xml" ) ; 
@@ -662,6 +668,9 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 	if(name ==  "DEBUG ROll" ) debugRoll = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
 	if(name ==  "INTERPOLATE ORIENTATION TIME" ) interpolateOrientationTime = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
 
+
+	if(name ==  "HEAD ORIENTATION SCALE" ) headOrientationScale = ( (ofxUISlider *) e.widget )->getScaledValue() ; 
+	//headOrientationScale
 
 //	gui->addWidgetDown(new ofxUISlider( length-xInit,dim, 0.0, 1.0, interpolateOrientationTime , "INTERPOLATE ORIENTATION TIME")); 
 

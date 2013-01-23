@@ -56,7 +56,7 @@ EggAvatar::EggAvatar()
     m_TranslationX = 0;
     m_TranslationY = 0;
     m_FacingUser = true;
-    m_HeadPoseFiltering = true;
+    m_HeadPoseFiltering = false;
     m_ReportedPitchAverage = 0;
     m_ReportedYawAverage = 0;
     m_ReportedRollAverage = 0;
