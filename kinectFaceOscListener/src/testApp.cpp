@@ -176,12 +176,12 @@ void testApp::update(){
 					interpolateOrientationTime
 					*/
 
-					head_pitch = ofLerp( head_pitch , _head_pitch , 0.5f ) * headOrientationScale ;
-					head_yaw = ofLerp( head_yaw , _head_yaw , 0.5f ) * headOrientationScale ;
-					head_roll = ofLerp( head_roll , _head_roll , 0.5f ) * headOrientationScale ;
-					//Tweenzor::add( &head_pitch , head_pitch , _head_pitch , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
-					//Tweenzor::add( &head_yaw , head_yaw , _head_yaw , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
-					//Tweenzor::add( &head_roll , head_roll , _head_roll , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
+					//head_pitch = ofLerp( head_pitch , _head_pitch , 0.5f ) * headOrientationScale ;
+					//head_yaw = ofLerp( head_yaw , _head_yaw , 0.5f ) * headOrientationScale ;
+					//head_roll = ofLerp( head_roll , _head_roll , 0.5f ) * headOrientationScale ;
+					Tweenzor::add( &head_pitch , head_pitch , _head_pitch * headOrientationScale , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
+					Tweenzor::add( &head_yaw , head_yaw , _head_yaw * headOrientationScale , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
+					Tweenzor::add( &head_roll , head_roll , _head_roll * headOrientationScale , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
 					//Tweenzor::add( float , begin , end , delay , duration , 
 					//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
 					ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1 ,0,0 ) ); 
@@ -193,10 +193,14 @@ void testApp::update(){
 				}
 				
 			}
-			else if ( m.getAddress() ==  "face_active/" )
+			else if ( m.getAddress() ==  "faceCenter/" )
 			{
-				int isActive = m.getArgAsInt32( 0 ) ; 
-				//cout << "isActive : " << isActive << endl ; 
+				float _x = m.getArgAsFloat( 0 ) ; 
+				float _y = m.getArgAsFloat( 1 ) ; 
+				faceCenter.x = _x ; 
+				faceCenter.y = _y ;
+				
+				//cout << "face center is @ : " << _x << " , " << _y << endl ; 
 			}
 			else
 			{
@@ -342,6 +346,12 @@ void testApp::update(){
 					m2.addIntArg( (int) bFaceActive ) ; 
 					sender.sendMessage( m2 ) ; 
 				}
+
+				ofxOscMessage faceMessage ; 
+				faceMessage.setAddress( "/faceCenter" ) ; 
+				faceMessage.addFloatArg( faceCenter.x ) ; 
+				faceMessage.addFloatArg( faceCenter.y ) ;
+				sender.sendMessage ( faceMessage ) ; 
 			}
 		}
 	}

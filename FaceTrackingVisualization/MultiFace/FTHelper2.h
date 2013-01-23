@@ -42,8 +42,8 @@ public:
     HRESULT GetCameraConfig(FT_CAMERA_CONFIG* cameraConfig);
 	void setupOsc( ofxOscSender * _osc ) ; 
 
-	bool getNumUsers(  ) { return m_nbUsers ;  } 
-	bool bFaceDetected ; 
+	float getFaceCenterX ( ) { return m_XCenterFace ; } 
+	float getFaceCenterY ( ) { return m_YCenterFace ; } 
 
 private:
     KinectSensor                m_KinectSensor;

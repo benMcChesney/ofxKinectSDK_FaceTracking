@@ -94,16 +94,18 @@ int MultiFace::Run(HINSTANCE hInst, PWSTR lpCmdLine, int nCmdShow)
                 DispatchMessage(&msg);
 				ofxOscMessage m ; 
 				m.setAddress( "pitch_yaw_roll/" ) ; 
-				/*
-				m_Pitch = 0;
-    m_Yaw = 0;
-    m_Roll =
-				*/
 				m.addFloatArg( m_eggavatar[0].getPitch() ) ; 
 				m.addFloatArg( m_eggavatar[0].getYaw() ) ; 
 				m.addFloatArg( m_eggavatar[0].getRoll() ) ; 
 				
 				oscSender->sendMessage( m ) ; 
+
+				ofxOscMessage m4 ; 
+				m4.setAddress( "faceCenter/" ) ; 
+				m4.addFloatArg( m_FTHelper.getFaceCenterX() ) ; 
+				m4.addFloatArg( m_FTHelper.getFaceCenterY() ) ;
+				oscSender->sendMessage( m4 ) ; 
+			
 			}
         }
     }

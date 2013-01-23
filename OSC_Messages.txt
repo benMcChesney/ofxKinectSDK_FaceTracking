@@ -20,3 +20,7 @@ Feature sets ( include a float argument between 0 -1 )
 
 "/bFaceActive" 
 [0] int faceActive ( 0 = false , 1 = true ) 
+
+"/faceCenter"
+[0] float faceCenterX
+[1] float faceCenterY

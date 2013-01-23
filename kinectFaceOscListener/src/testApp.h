@@ -88,4 +88,5 @@ class testApp : public ofBaseApp {
 
 		float interpolateOrientationTime ; 
 		float headOrientationScale ; 
+		ofPoint faceCenter ; 
 };
