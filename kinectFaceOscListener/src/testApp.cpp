@@ -171,25 +171,15 @@ void testApp::update(){
 					float _head_pitch = m.getArgAsFloat( 0 ) ; 
 					float _head_yaw = m.getArgAsFloat( 1 ) ;
 					float _head_roll = m.getArgAsFloat( 2 ) ; 
-					/*
 
-					interpolateOrientationTime
-					*/
-
-					//head_pitch = ofLerp( head_pitch , _head_pitch , 0.5f ) * headOrientationScale ;
-					//head_yaw = ofLerp( head_yaw , _head_yaw , 0.5f ) * headOrientationScale ;
-					//head_roll = ofLerp( head_roll , _head_roll , 0.5f ) * headOrientationScale ;
 					Tweenzor::add( &head_pitch , head_pitch , _head_pitch * headOrientationScale , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
 					Tweenzor::add( &head_yaw , head_yaw , _head_yaw * headOrientationScale , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
 					Tweenzor::add( &head_roll , head_roll , _head_roll * headOrientationScale , 0.0f, interpolateOrientationTime , EASE_OUT_QUAD ) ; 
-					//Tweenzor::add( float , begin , end , delay , duration , 
-					//cout << head_pitch << " , " << head_yaw << " , " << head_roll << endl ; 
-					ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1 ,0,0 ) ); 
+
+					ofQuaternion xRot( ofRadToDeg( head_pitch ) , ofVec3f( 1 , 0 , 0 ) ); 
 					ofQuaternion yRot( ofRadToDeg( head_yaw ) , ofVec3f( 0,1,0 ) ); 
 					ofQuaternion zRot( ofRadToDeg( head_roll ) , ofVec3f( 0,0,1 ) ); 
-    
-					headOrientation = xRot * yRot * zRot ; 
-					
+   					headOrientation = xRot * yRot * zRot ; 				
 				}
 				
 			}
@@ -197,9 +187,10 @@ void testApp::update(){
 			{
 				float _x = m.getArgAsFloat( 0 ) ; 
 				float _y = m.getArgAsFloat( 1 ) ; 
+				_x = ofMap ( _x , 0.0 , 640.0 , -1.0 , 1.0 , true ) ; 
+				_x = ofMap ( _y , 0.0 , 480.0 , -1.0 , 1.0 , true ) ; 
 				faceCenter.x = _x ; 
-				faceCenter.y = _y ;
-				
+				faceCenter.y = _y ;				
 				//cout << "face center is @ : " << _x << " , " << _y << endl ; 
 			}
 			else
