@@ -188,7 +188,7 @@ void testApp::update(){
 				float _x = m.getArgAsFloat( 0 ) ; 
 				float _y = m.getArgAsFloat( 1 ) ; 
 				_x = ofMap ( _x , 0.0 , 640.0 , -1.0 , 1.0 , true ) ; 
-				_x = ofMap ( _y , 0.0 , 480.0 , -1.0 , 1.0 , true ) ; 
+				_y = ofMap ( _y , 0.0 , 480.0 , -1.0 , 1.0 , true ) ; 
 				faceCenter.x = _x ; 
 				faceCenter.y = _y ;				
 				//cout << "face center is @ : " << _x << " , " << _y << endl ; 
